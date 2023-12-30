@@ -1,15 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <title>Header Logo</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+        <header>
+            <div id="logo">LOGO</div>
+                <nav id="navibar">
+                    <a href="#first" class="navlink">First</a>
+                    <a href="#second" class="navlink">Second</a>
+                    <a href="#third" class="navlink">Third</a>
+                </nav>
+                <button id="modeToggle">Toggle Dark/Light Mode</button>
+                <script>
+                    document, getElementById('modeToggle').addEventListener('click', function() {
+                        document.body.classList.toggle('dark-mode');
+                    })
+                </script>
+        </header>
+
+        <section id="info">
+            <div id="information">
+                <h2>This is useful information.</h2>
+                <p>Here is the actual useful information about this website.</p>
+                <button>button</button>
+            </div>
+        </section>
+        <main>
+            <section id="types">
+                <div id="type1">
+                    <h2>Here is info about type one</h2>
+                </div>
+                <div id="type2">
+                    <h2>Here is info about type two</h2>
+                </div>
+                <div id="type3">
+                    <h2>Here is info about type three</h2>
+                </div>
+            </section>
+
+            <section id="quote">
+                <div class="quotation">
+                    <h3>Some Quotation Here</h3>
+                    <h3>Author</h3>
+                </div>
+            </section>
+
+            <section id="contact">
+                <div class="contact-info">
+                    <h2>Another button for important info</h2>
+                    <p>click this button</p>
+                    <button>Contact Us</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Copyright &copy; The Odin Project</p>
+        </footer>
+
+        <script>
+            window.addEventListener('load', function() {
+                var loader = document.getElementById('loadingOverlay');
+                loader.style.display = 'none';
+            });
+        </script>
+
+    </body>
     </html>
-        <head>
-            <title>Header Logo</title>
-        </head>
-        <body>
-            <div id="intro">
-                <p>This website is awesome</p>
-            </div>
-            <div id="info">
-            </div>
-            <div id="quote"></div>
-            <div id="contact"></div>
-        </body>
