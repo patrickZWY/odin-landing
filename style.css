@@ -11,6 +11,10 @@ body.dark-mode {
     background-color: #121212;
     color: #f0f0f0;
 }
+body.dark-mode header {
+    background-color: #333;
+    color: #4ecdc4;
+}
 body.dark-mode a, body.dark-mode nav#navibar a {
     color: #a8a8ff;
 }
@@ -50,7 +54,38 @@ body.dark-mode .quotation {
     color: #dcdcdc; 
     border-left: 5px solid #6b8e23; 
 }
+body.dark-mode .information {
+    background-color: #2193b0;
+    color: #f4a460;
+    border: 1px solid #444;
+}
+body.dark-mode .information h2,
+body.dark-mode .information p {
+    color: #f4a460;
+}
 
+body.dark-mode .information button {
+    background-color: #333333;
+    color: #f4a460;
+}
+
+body.dark-mode .info-section button:hover {
+    background-color: #444444;
+}
+
+body.dark-mode .contact-info h2,
+body.dark-mode .contact-info p {
+    color: #f4a460;
+}
+
+body.dark-mode .contact-info button {
+    background-color: #333333;
+    color: #f4a460;
+}
+
+body.dark-mode .contact-info button:hover {
+    background-color: #444444;
+}
 
 .loading-overlay {
     position: fixed;
@@ -97,6 +132,7 @@ header {
 
 nav#navibar {
     display: flex;
+    justify-content: space-between;
 }
 
 nav#navibar a {
@@ -112,10 +148,11 @@ nav#navibar a:hover {
 
 .navlink {
     margin: 0 10px;
-    padding: 5px 10px;
+    padding: 5px 30px;
     text-decoration: none;
     color: inherit;
     transition: color 0.3s ease;
+    letter-spacing: 1px;
 }
 
 .navlink:hover {
@@ -125,6 +162,13 @@ nav#navibar a:hover {
 main {
     max-width: 1200px;
     margin: auto;
+}
+
+.info-section {
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 footer {
@@ -204,6 +248,7 @@ button:active {
     font-style: normal;
     font-size: 0.9em;
 }
+
 
 @media (max-width: 768px) {
     nav#navibar {
