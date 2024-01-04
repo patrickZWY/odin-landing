@@ -17,11 +17,8 @@
                     <a href="#third" class="navlink">ThirdLinkHere</a>
                 </nav>
                 <button id="modeToggle">Toggle Dark/Light Mode</button>
-                <script>
-                    document.getElementById('modeToggle').addEventListener('click', function() {
-                        document.body.classList.toggle('dark-mode');
-                    })
-                </script>
+                <span>Light Mode</span>
+                <script src="toggle.js"></script>
         </header>
 
         <section id="info" class="information">
@@ -45,11 +42,12 @@
             </section>
 
             <section id="quote">
-                <div class="quotation">
-                    <h3>Some Quotation Here</h3>
+                <div class="quotation" id="quotation">
+                    <h3>"Some Quotation Here"</h3>
                     <h3>Author</h3>
                 </div>
             </section>
+            <script src="quotation.js"></script>
 
             <section id="contact" class="contact-info">
                 <div class="contact-info">
@@ -70,6 +68,6 @@
                 loader.style.display = 'none';
             });
         </script>
-
+        
     </body>
     </html>
