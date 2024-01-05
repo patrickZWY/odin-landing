@@ -1,3 +1,4 @@
+"""
 from flask import Flask, request
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -37,9 +38,7 @@ def home():
 
 # handling submission
 @app.route('/send', methods=['POST'])
-
 @limiter.limit("2/minute")
-
 def send_email():
     try:
         data = request.json
@@ -62,6 +61,99 @@ def send_email():
 
         def sanitize(input_string):
             return re.sub(r'[^a-zA-Z0-9@. ]', '', input_string)
+        data = {key: sanitize(str(value)) for key, value in data.items()}
+
+        # print to console for debugging
+        print(json.dumps(data, indent=4))
+
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        formatted_data = f"{timestamp}: {json.dumps(data)}\n"
+
+        with open("submissions.txt", "a") as file:
+            file.write(formatted_data)
+        return 'Submission successful!'
+    except Exception as e:
+        logging.error(f"Error processing the request: {e}", exc_info=True)
+        return "Failed to record submission", 500
+    
+if __name__ == '__main__':
+    app.run(debug=True)
+"""
+from flask import Flask, request
+from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import json
+from datetime import datetime
+import logging
+import re
+import signal
+import sys
+
+def validate_name(f):
+    def wrapper(*args, **kwargs):
+        name = request.json.get('name', '')
+        if not re.match(r'^[a-zA-Z\s]{2,50}$', name):
+            return "Invalid name", 400
+        # sending the same send_email function to next decorator
+        return f(*args, **kwargs)
+    return wrapper
+
+def validate_email(f):
+    def wrapper(*args, **kwargs):
+        email = request.json.get('email', '')
+        if not re.match(r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b$', email):
+            return "Invalid email", 400
+        return f(*args, **kwargs)
+    return wrapper
+
+def validate_message(f):
+    def wrapper(*args, **kwargs):
+        message = request.json.get('message', '')
+        if not(len(message) > 0 and len(message) < 500):
+            return "Invalid message", 400
+        return f(*args, **kwargs)
+    return wrapper
+
+def sanitize(input_string):
+    return re.sub(r'[^a-zA-Z0-9@. ]', '', input_string)
+
+
+def graceful_shutdown(sig, frame):
+    logging.info('Shut down gracefully')
+    sys.exit(0)
+# Ctrl-C
+signal.signal(signal.SIGINT, graceful_shutdown)
+# kill command
+signal.signal(signal.SIGTERM, graceful_shutdown)
+
+app = Flask(__name__)
+CORS(app)
+
+limiter = Limiter(
+    app,
+    default_limits=["200 per day", "120 per hour"]
+)
+
+logging.basicConfig(level=logging.ERROR,
+                    filename='errorlog.log',
+                    filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+# verifying if server is working
+
+@app.route('/')
+def home():
+    return 'Welcome to the Contact Form Server!'
+
+# handling submission
+@app.route('/send', methods=['POST'])
+@limiter.limit("2/minute")
+@validate_name
+@validate_email
+@validate_message
+def send_email():
+    try:
+        data = request.json
         data = {key: sanitize(str(value)) for key, value in data.items()}
 
         # print to console for debugging
