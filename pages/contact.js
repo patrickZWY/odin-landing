@@ -55,7 +55,13 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     .then(response => {
         formMessageDiv.textContent = 'Success!';
         formMessageDiv.style.color = 'pink';
-        form.reset();
+
+        setTimeout(() => {
+            form.reset();
+            formMessageDiv.textContent = '';
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit';
+        }, 5000);
     })
     .catch(error => {
         console.error('Error:', error);
@@ -63,7 +69,9 @@ document.getElementById('contact-form').addEventListener('submit', function(even
         formMessageDiv.style.color = 'Black';
     })
     .finally(() => {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit';
+        setTimeout(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit';
+        }, 5000);
     });
 });

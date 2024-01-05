@@ -116,7 +116,7 @@ def validate_message(f):
     return wrapper
 
 def sanitize(input_string):
-    return re.sub(r'[^a-zA-Z0-9@. ]', '', input_string)
+    return re.sub(r'[^a-zA-Z0-9@!?()&. ]', '', input_string)
 
 
 def graceful_shutdown(sig, frame):
