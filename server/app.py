@@ -79,11 +79,10 @@ def send_email():
 if __name__ == '__main__':
     app.run(debug=True)
 """
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-import json
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import logging
 import re
@@ -129,6 +128,19 @@ signal.signal(signal.SIGTERM, graceful_shutdown)
 
 app = Flask(__name__)
 CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///submissions.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class Submission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    message = db.Column(db.String(500), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def __repr__(self):
+        return f"<Submission {self.name}>"
 
 limiter = Limiter(
     app,
@@ -145,6 +157,11 @@ logging.basicConfig(level=logging.ERROR,
 def home():
     return 'Welcome to the Contact Form Server!'
 
+@app.route('/submissions')
+def get_submissions():
+    submissions = Submission.query.all()
+    return jsonify([{'name': s.name, 'email' : s.email, 'message': s.message, 'timestamp':s.timestamp.isoformat()} for s in submissions])
+
 # handling submission
 @app.route('/send', methods=['POST'])
 @limiter.limit("4/minute")
@@ -156,6 +173,20 @@ def send_email():
         data = request.json
         data = {key: sanitize(str(value)) for key, value in data.items()}
 
+        new_submission = Submission(
+            name=data['name'],
+            email=data['email'],
+            message=data['message']
+        )
+
+        db.session.add(new_submission)
+        db.session.commit()
+
+        return 'Submission successful!'
+    except Exception as e:
+        logging.error(f"Error processing the request: {e}", exc_info=True)
+        return "Failed to record submission", 500
+"""
         # print to console for debugging
         print(json.dumps(data, indent=4))
 
@@ -168,6 +199,7 @@ def send_email():
     except Exception as e:
         logging.error(f"Error processing the request: {e}", exc_info=True)
         return "Failed to record submission", 500
-    
+"""
+
 if __name__ == '__main__':
     app.run(debug=True)
