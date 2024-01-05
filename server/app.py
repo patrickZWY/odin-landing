@@ -132,7 +132,7 @@ CORS(app)
 
 limiter = Limiter(
     app,
-    default_limits=["200 per day", "120 per hour"]
+    default_limits=["200 per day", "20 per hour"]
 )
 
 logging.basicConfig(level=logging.ERROR,
@@ -147,7 +147,7 @@ def home():
 
 # handling submission
 @app.route('/send', methods=['POST'])
-@limiter.limit("2/minute")
+@limiter.limit("4/minute")
 @validate_name
 @validate_email
 @validate_message
