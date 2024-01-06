@@ -2,4 +2,6 @@
 
 server/venv
 
+server/instance/submissions.db
+
 server/submissions.txt
