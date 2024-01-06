@@ -39,7 +39,7 @@ def home():
 # handling submission
 @app.route('/send', methods=['POST'])
 @limiter.limit("2/minute")
-def send_email():
+def send_to_database():
     try:
         data = request.json
 
@@ -94,7 +94,7 @@ def validate_name(f):
         name = request.json.get('name', '')
         if not re.match(r'^[a-zA-Z\s]{2,50}$', name):
             return "Invalid name", 400
-        # sending the same send_email function to next decorator
+        # sending the same send_to_database function to next decorator
         return f(*args, **kwargs)
     return wrapper
 
@@ -168,7 +168,7 @@ def get_submissions():
 @validate_name
 @validate_email
 @validate_message
-def send_email():
+def send_to_database():
     try:
         data = request.json
         data = {key: sanitize(str(value)) for key, value in data.items()}
