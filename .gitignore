@@ -1,5 +1,9 @@
 *.log
 
+__pycache__/
+
+*.cache
+
 server/venv
 
 server/instance/submissions.db
